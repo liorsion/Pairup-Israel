@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block content %}
+	<div class="grid_8 alpha" style="text-align:center">
+		<a href="{% url look_for_partner %}">
+			<h1 class="actionButton">{% trans "Find a co-founder" %}</h1>
+		</a>
+	</div>
+	<div class="grid_8 omega" style="text-align:center">
+		<a href="{% url list_positions %}">
+			<h1 class="actionButton">{% trans "Find a startup to join" %}</h1>
+		</a>
+	</div>
+	<div style="clear:both" class="container_16 alpha omega columns">
+		<section>
+			There are currently {{ total_users }} entrepreneurs active, with {{ total_open_positions }} open positions.
+		</section>
+	</div>
+{% endblock %}

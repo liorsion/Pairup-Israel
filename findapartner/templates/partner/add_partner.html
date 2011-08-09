@@ -1,0 +1,102 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load humanize %}
+{% block page_title %}{% trans "Add Wanted Profile - Pairup Israel" %}{% endblock %}
+{% block content %}
+	<header class="container_16 columns alpha omega clearfix">
+		<h1 class="grid_8 columns alpha">{% trans "Add a new partner request" %}</h1>
+	</header>
+	<div id="partner_info" class="grid_8 columns alpha">
+		<form method="post">{% csrf_token %}
+		{{ form.as_p }}
+		<p>
+			<input type="submit" value="{% trans "Save" %}" />
+		</p>
+		</form>
+	</div>
+	<div id="extra_info" class="grid_8 columns omega">
+		<header>
+			<h2>{% trans "Your Existing Positions" %}</h2>
+		</header>
+		{% for existing_position in existing_partners %}
+		<article id="article_{{ existing_position.id }}">
+			<header>
+				<a href="{% url public_partner existing_position.id  %}">
+					<h4 id="position_{{ existing_position.id }}">
+					{{ existing_position.general_description }}
+					</h4>
+				</a>
+			</header>
+			<p>
+				{% trans "Last Updated:" %} <span id="{{ existing_position.id }}_date">{{ existing_position.last_update|naturalday }} ({{ existing_position.last_update|timeuntil }} ago)</span>
+			</p>
+			<nav class="grid_8 alpha omega">
+				<div class="grid_5 alpha">
+					<a class="button" id="update_{{ existing_position.id }}">Update</a>
+				</div>
+				<div class="grid_3 omega">
+					<a class="button" id="delete_{{ existing_position.id }}">Delete</a>
+				</div>
+			</nav>
+		</article>
+		{% endfor %}
+	</div>
+{% endblock %}
+
+{% block external_sources %}
+<script src="{{ STATIC_URL }}js/jquery.tagsinput.min.js"><\/script>
+{% endblock %}
+{% block extra_css %}  
+<link rel="stylesheet" href="{{ STATIC_URL }}css/jquery.tagsinput.css">
+{% endblock %}
+{% block dom_ready_script %}
+	$('[id^=update_]').click(function(e) {
+		e.preventDefault();
+		var e_data = this.id.split("_");
+		$.post('{% url update_event_action action="update" %}',
+				{'ad_id':e_data[1]},
+				function(data) {
+					if (data.success) {
+						$('#'+e_data[1]+'_date').fadeOut('slow');
+						$('#'+e_data[1]+'_date').html('today (0 minutes ago) <span style="color:red">updated</span>');
+						$('#'+e_data[1]+'_date').fadeIn('slow');
+					} else {
+						alert(data.message);
+					}
+				}, "json");
+	})
+	$('[id^=delete_]').click(function(e) {
+		e.preventDefault();
+		var e_data = this.id.split("_");
+		if (confirm("{% trans "Are you sure you want to delete" %} "+$('#position_'+e_data[1]).html()+"?")) {
+			$.post('{% url update_event_action action="delete" %}',
+					{'ad_id':e_data[1]},
+					function(data) {
+						if (data.success) {
+							$('#article_'+e_data[1]).fadeOut('slow');
+						} else {
+							alert(data.message);
+						}
+					}, "json");
+		}
+	})
+	$('#tags').tagsInput({
+		  defaultText: 'add an experience tag',
+	        autocomplete_url: '{% url get_experience_categories %}',
+	        autocomplete:{
+	            selectFirst: true,
+	            autoFill: true,
+	            unique: true
+	        }
+	});
+	$('#category_tags').tagsInput({
+		  	defaultText: 'add venture categories tag',
+	        autocomplete_url: '{% url get_categories %}',
+	        autocomplete:{
+	            selectFirst: true,
+	            autoFill: true,
+	            unique: true
+	        }
+	});
+	
+{% endblock %}

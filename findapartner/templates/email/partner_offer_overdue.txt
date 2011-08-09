@@ -1,0 +1,12 @@
+Dear {{ to_user.username }},
+		
+It's been over a week since you last updated your request for a cofounder here:
+
+{{ partner_link }}
+
+If you would like to re-issue the request, please log in to your profile and renew the request.
+
+Thank you,
+Pairup Israel Team
+
+You are receiving this alert since you've previously requested to get notified on these event, through http://pairup.org.il

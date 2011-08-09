@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load humanize %}
+{% block page_title %}{% trans "List Wanted Cofounders - Pairup Israel" %}{% endblock %}
+{% block content %}
+<table>
+	<thead>  
+        <tr>  
+            <th scope="col">Added By</th>  
+            <th scope="col">Looking For</th>
+            <th scope="col">Idea / Venture</th>
+            <th scope="col">Experience</th>
+            <th scope="col">Experience Tags</th>    
+            <th scope="col">City</th>
+            <th scope="col">Last Updated</th>    
+        </tr>  
+    </thead>  
+    {% for partner in object_list %}
+    <tr>
+    	<td><a href="{% url user_profile partner.suggested_by.get_profile.user_slug %}">{{ partner.suggested_by.username }}</a></td>
+    	<td>{{ partner.general_description }}</td>
+    	<td>{{ partner.idea }}</td>
+    	<td>{{ partner.experience_general }}</td>
+    	<td>{% for experience_category in partner.experience_categories.all %}<a href="{% url list_positions %}?exp_cat={{ experience_category.name }}">{{ experience_category.name }}</a>, {% endfor %}</td>
+    	<td>{{ partner.city }}</td>
+    	<td>{{ partner.last_update }}</td>
+    </tr>
+    {% endfor %}
+</table>
+{% endblock %}
+

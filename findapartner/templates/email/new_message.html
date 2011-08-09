@@ -1,0 +1,37 @@
+{% extends "email/email_base.html" %}
+{% block msgsubject %}New message for you{% endblock %}
+{% block content %}
+<tr>
+	<td>
+		Dear {{ to_user.username }},
+	</td>
+</tr>
+<tr>
+	<td>
+		{% if sender_profile_link %}
+		You have received a message from <a href="{{ sender_profile_link }}">{{ from_name  }}</a>:
+		{% else %}
+		You have received a message from {{ from_name  }}:
+		{% endif %}
+	</td>
+</tr>
+<tr>
+	<td>
+	{{ message }}
+	</td>
+</tr>
+<tr>
+	<td>
+		{% if sender_profile_link %}
+		You can reach them on the site (see link: {{ sender_profile_link }})
+			{% if from_email %}
+				or through this email: {{ from_email }}
+			{% endif %}
+		{% else %}
+			{% if from_email %}
+		You can reach them through this email: {{ from_email }}
+			{% endif %}
+		{% endif %}
+	</td>
+</tr>
+{% endblock %}

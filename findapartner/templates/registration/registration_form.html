@@ -1,0 +1,43 @@
+{% extends "fb_base.html" %}
+{% load i18n %}
+{% block page_title %}{% trans "Add Wanted Profile - Pairup Israel" %}{% endblock %}
+{% block content %}
+<header class="container_16 columns alpha omega clearfix">
+	<h1 class="grid_8 columns alpha">{% trans "User registration" %}</h1>
+</header>
+<div id="login_info" class="grid_8 columns alpha">
+	<form method="post" accept-charset="utf-8" id="reg_form"> {% csrf_token %}
+		{{ form.as_p }}
+	</form>
+</div>
+<div class="grid_8 columns omega">
+	<p class="grid_8 columns omega">
+		<a class="button" href="#" id="fb_login">Facebook</a>
+	</p>
+	<p class="grid_8 columns omega">
+		<a class="button" href="{% url socialauth_begin "twitter" %}" id="assoc_twitter">Twitter</a>
+	</p>
+	<p class="grid_8 columns omega">
+		<a class="button" href="{% url socialauth_begin "linkedin" %}" id="assoc_linkedin">LinkedIn</a>
+	</p>
+	<p class="grid_8 columns omega">
+		<input type="submit" value="{% trans 'Register Locally' %}" />
+	</p>
+</div>
+{% endblock %}
+{% block fb_ready_block %}
+	$('#fb_login').click(fb_base_login);
+{% endblock %}
+{% block fb_login_success %}
+	$('#reg_form').submit();
+{% endblock %}
+{% block twitter_ready_block %}
+	$('#atwitter_login').click(function() {
+		T.signIn();
+	})
+{% endblock %}
+{% block twitter_login_success %}
+	$('#id_username').val(user.screen_name);
+	$('#reg_form').attr("action","{% url twitter_reg %}");
+	$('#reg_form').submit();
+{% endblock %}

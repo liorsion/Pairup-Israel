@@ -1,0 +1,35 @@
+{% extends "fb_base.html" %}
+{% load i18n %}
+{% block page_title %}{% trans "Add Wanted Profile - Pairup Israel" %}{% endblock %}
+{% block content %}
+	<header class="container_16 columns alpha omega clearfix">
+		<h1 class="grid_8 columns alpha">{% trans "Please enter your credentials" %}</h1>
+	</header>
+	<div id="login_info" class="grid_8 columns alpha">
+		<form method="post" id="login_form">{% csrf_token %}
+		{{ form.as_p }}
+		<input type="submit" value="{% trans "Login" %}" />
+		</form>
+	</div>
+	<div class="grid_8 columns omega">
+		<section class="grid_8 alpha omega">
+			<a class="button" href="#" id="fb_login">Facebook</a>
+		</section>
+		<section class="grid_8 alpha omega">
+			<a class="button" href="{% url socialauth_begin "twitter" %}" id="assoc_twitter">Twitter</a>
+		</section>
+		<section class="grid_8 alpha omega">
+			<a class="button" href="{% url socialauth_begin "linkedin" %}" id="assoc_linkedin">LinkedIn</a>
+		</section>
+		<section class="grid_8 alpha omega">
+			<a class="button" href="{% url registration_register %}">Register Locally</a>
+		</section>
+	</div>
+{% endblock %}
+{% block fb_ready_block %}
+	$('#fb_login').click(fb_base_login);
+{% endblock %}
+{% block fb_login_success %}
+	$('#login_form').attr("action","{% url facebook_login %}");
+	$('#login_form').submit();
+{% endblock %}

@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% block extrabody %}
+ {{ block.super }}
+<div id="fb-root"></div>
+<script src="http://platform.twitter.com/anywhere.js?id={{ TWITTER_API_KEY }}&v=1" type="text/javascript"></script>
+<script type="text/javascript">
+twttr.anywhere.config({ callbackURL: "{% url twitter_reg %}" });
+twttr.anywhere(function(T) {
+	{% block twitter_ready_block %}{% endblock %}
+	T.bind("authComplete", function (e, user) {
+		{% block twitter_login_success %}
+		{% endblock %}
+    });
+});
+</script>
+<script>
+(function() {
+			var e = document.createElement('script');
+			e.type = 'text/javascript';
+			e.src = document.location.protocol + '//connect.facebook.net/en_US/all.js';
+			e.async = true;
+			document.getElementById('fb-root').appendChild(e);
+		  }());
+		  
+window.fbAsyncInit = function() {
+			FB.init({appId: '{{ FACEBOOK_APP_ID }}', status: true, cookie: true, xfbml: true});
+			FB.Event.subscribe('message.send', function(response) {
+			 	alert("Page shared with friends successfully!");
+			 	_gaq.push(['_trackEvent', 'sharing', 'fb_shared', '', 1]);
+			});
+			{% block fb_ready_block %}
+			{% endblock %}
+			};
+			
+			function fb_base_login() {
+				  FB.login(function(response) {
+					  if (response.session) {
+					    if (response.perms) {
+					    		{% block fb_login_success %}
+					    		{% endblock %}
+					    } else {
+					    		{% block fb_login_not_auth %}
+					      		alert("We're sorry, you have to authorize Kidous in Facebook in order to complete the process");
+					      		{% endblock %}
+					    }
+					  } else {
+						  {% block fb_login_failed %}
+						  	alert("Facebook authorization failed, we're trying to find out why");
+						  {% endblock %}
+					  }
+					}, {perms:"{{ FACEBOOK_EXTENDED_PERMISSIONS|safe }}"});
+				 }
+			</script>
+{% endblock %}

@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load humanize %}
+{% block page_title %}{% trans "List Active Users - Pairup Israel" %}{% endblock %}
+{% block content %}
+<div class="container_16 alpha omega columns">
+	<div class="grid_3 alpha">
+		<a class="button" href="{% url add_position %}" style="padding: 10px 12px; margin-top:0px">{% trans "Add a new position" %}</a>
+	</div>
+	<div class="grid_13 omega">
+		<form method="post" id="tag_search_form">{% csrf_token %}
+			<div class="grid_11">
+				<input type="search" name="search_categories" id="search_categories" />
+			</div>
+			<input type="submit" value="search" style="margin-left: 5px; height: 44px; margin-top:0px" />
+		</form>
+	</div>
+</div>
+<table>
+	<thead>  
+        <tr>  
+            <th scope="col">Name</th>  
+            <th scope="col">Looking?</th>
+            <th scope="col">Skills</th>
+        </tr>  
+    </thead>  
+    {% for user in object_list %}
+    <tr>
+    	<td>
+    		<a href="{% url user_profile user.get_profile.user_slug %}">{{ user.username }}</a>
+    	</td>
+    	<td>{{ user.get_profile.looking_for_position }}</td>
+    	<td><ul class="grid_6 columns omega clearfix inline-list">
+				{% for skill in user.get_profile.skills.all %}
+				<li>{{ skill.name }}</li>
+				{% endfor %}
+			</ul>
+		</td>
+    </tr>
+    {% endfor %}
+</table>
+{% endblock %}
+{% block external_sources %}
+<script src="{{ STATIC_URL }}js/jquery.tagsinput.min.js"><\/script>
+{% endblock %}
+{% block extra_css %}  
+<link rel="stylesheet" href="{{ STATIC_URL }}css/jquery.tagsinput.css">
+{% endblock %}
+{% block dom_ready_script %}
+	{{ block.super }}
+$('#search_categories').tagsInput({
+		  defaultText: 'add search tags',
+	        autocomplete_url: '{% url get_experience_categories %}',
+	        autocomplete:{
+	            selectFirst: true,
+	            autoFill: true,
+	            unique: true
+	        },
+	        'height': '32px',
+	        'width': '640px'
+	});
+{% endblock %}

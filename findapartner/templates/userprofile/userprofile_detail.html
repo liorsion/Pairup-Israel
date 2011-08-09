@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load avatar_tags %}
+{% block page_title %}{{ object }} {% trans "User Profile - Pairup Israel" %}{% endblock %}
+{% block extra_css %}  
+<link rel="stylesheet" href="{{ STATIC_URL }}css/jquery.tagsinput.css">
+{% endblock %}
+{% block content %}
+	<header class="grid_16 columns alpha omega" style="margin-bottom:10px">
+		<div class="grid_2 alpha">
+		{% avatar object.user 100 %}
+		</div>
+		<h1 class="grid_8 omega">{{ object }}</h1>
+	</header>
+	{% if object.looking_for_position %}
+	<h3 class="available grid_8 alpha clearfix">
+	{% trans "Available to join" %}
+	</h3>
+	{% endif %}
+	<div id="contact" class="grid_16 columns alpha omega" >
+		<a class="button" id="contact">Contact me</a>
+	</div>
+	<section id="about" class="grid_16 columns alpha omega">
+			<h4 class="grid_2 column alpha">About me</h4>
+			<article class="grid_6 column omega">
+				<p>
+					{{ object.extra_info }}
+				</p>
+			</article>
+	</section>
+	<section id="skills" class="grid_16 columns alpha omega">
+			<header class="grid_2 column alpha">
+				<h4>Skills</h4>
+			</header>
+			<ul class="grid_6 columns omega clearfix inline-list">
+				{% for skill in object.skills.all %}
+				<li>{{ skill.name }}</li>
+				{% endfor %}
+			</ul>
+	</section>
+	<section id="social" class="grid_16 columns alpha omega">
+			<header class="grid_2 column alpha">
+				<h4>Social</h4>
+			</header>
+			<ul class="grid_6 columns omega clearfix inline-list">
+				{% for social_link in active_social_profiles %}
+				<li>
+					<a href="{{ social_link.extra_data.public_profile_url }}" target="_href">{{ social_link.provider }}</a>
+				</li>
+				{% endfor %}
+			</ul>
+	</section>
+	<section id="message" class="grid_16 columns alpha omega clearfix" style="display:none">
+			<h4 class="grid_16 column alpha omega clearfix">Send me a message</h4>
+			<form id="message_form" method="POST">{% csrf_token %}
+				{{ form.as_p }}
+				<p>
+					<a class="button" id="send_message">{% trans "Send" %}</a>
+				</p>
+			</form>
+	</section>
+{% endblock %}
+{% block dom_ready_script %}
+	$('#contact').click(function() {
+		$('#message').show();
+		$('#message').scrollIntoView();
+		$("#message form input:not(:hidden):first").focus();
+	});
+	
+	$('#send_message').click(function() {
+		form = $('#message_form');
+		$.post('{% url send_message object.user.username %}',
+				{'from':form.find('#id_name').val(),
+				 'email':form.find('#id_email').val(),
+				 'message':form.find('#id_message').val()},
+				 function(data) {
+				 	if (data.success) {
+				 		$('#message').slideUp('slow');
+				 	} 
+				 	alert(data.message);
+				 }, "json"
+				)
+		
+	})
+{% endblock %}

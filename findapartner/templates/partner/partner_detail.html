@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load avatar_tags %}
+{% load humanize %}
+{% block page_title %}{% trans "Looking for a co-founder position - Pairup Israel" %}{% endblock %}
+{% block content %}
+	<header class="grid_12 columns alpha" style="margin-bottom:10px">
+		<h1>{{ object.idea }}</h1>
+	</header>
+	<div class="grid_4 omega">
+		<div id="fb-root"></div>
+		<script src="http://connect.facebook.net/en_US/all.js#appId=171089799627163&amp;xfbml=1"></script>
+		<fb:like href="http://pairup.org.il{% url public_partner object.id %}" send="true" width="240" show_faces="true" font="lucida grande"></fb:like>
+		<a href="http://twitter.com/share" class="twitter-share-button" data-count="none" data-via="pairupil">Tweet</a><script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+	</div>
+	<div class="grid_16 columns alpha omega">
+		<a href="{% url user_profile object.suggested_by.get_profile.user_slug %}">
+			{% avatar object.suggested_by 32 %}
+			{{ object.suggested_by.username }}
+		</a>
+		{% trans "Added on" %} <span id="{{ existing_position.id }}_date">{{ object.last_update|naturalday }} ({{ object.last_update|timesince }} ago)</span>:
+		{% if object.suggested_by == user %}
+		<a class="button" id="update_{{ object.id }}">Update</a>
+		<a class="button" id="delete_{{ object.id }}">Delete</a>
+		{% endif %}
+	</div>
+	<div class="grid_16 columns alpha omega" style="border-top:2px solid #D2D2D0;border-bottom:2px solid #D2D2D0;margin-top:10px">
+		<h2 style="margin-top:10px;">{{ object.general_description }}</h2>
+	</div>
+	
+	{% if object.categories.count %}
+	<section class="grid_16 columns alpha omega">
+		<span class="position_title grid_16 alpha omega">Categories of venture:</span> 
+		<h3>
+			<ul class="grid_6 columns omega clearfix inline-list">
+				{% for category in  object.categories.all %}
+				<li>{{ category.name }}</li>
+				{% endfor %}
+			</ul>
+		</h3>
+	</section>
+	{% endif %}
+	{% if object.experience_general %}
+	<section class="grid_16 columns alpha omega">
+		<span class="position_title grid_16 alpha omega">Experience needed:</span>
+		 <h3>{{ object.experience_general }}</h3>
+	</section>
+	{% endif %}
+	{% if object.experience_categories.count %}
+	<section class="grid_16 columns alpha omega">
+		<span class="position_title grid_16 alpha omega">Experience tags needed:</span>
+		<ul class="grid_6 columns omega clearfix inline-list">
+		{% for category in object.experience_categories.all %}
+		<li>{{ category.name }}</li>
+		{% endfor %}
+	</ul>
+	</section>
+	{% endif %}
+{% endblock %}
+{% block dom_ready_script %}
+	$('[id^=update_]').click(function(e) {
+		e.preventDefault();
+		var e_data = this.id.split("_");
+		$.post('{% url update_event_action action="update" %}',
+				{'ad_id':e_data[1]},
+				function(data) {
+					if (data.success) {
+						$('#'+e_data[1]+'_date').fadeOut('slow');
+						$('#'+e_data[1]+'_date').html('today (0 minutes ago) <span style="color:red">updated</span>');
+						$('#'+e_data[1]+'_date').fadeIn('slow');
+					} else {
+						alert(data.message);
+					}
+				}, "json");
+	})
+	$('[id^=delete_]').click(function(e) {
+		e.preventDefault();
+		var e_data = this.id.split("_");
+		if (confirm("{% trans "Are you sure you want to delete" %} "+$('#position_'+e_data[1]).html()+"?")) {
+			$.post('{% url update_event_action action="delete" %}',
+					{'ad_id':e_data[1]},
+					function(data) {
+						if (data.success) {
+							$('#article_'+e_data[1]).fadeOut('slow');
+						} else {
+							alert(data.message);
+						}
+					}, "json");
+		}
+	})
+{% endblock %}
+

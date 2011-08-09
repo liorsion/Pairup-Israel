@@ -1,0 +1,17 @@
+Dear {{ to_user.username }},
+	You have received a message from {{ from_name  }}:
+	{{ message }}
+	{% if sender_profile_link %}
+		You can reach them on the site (see link: {{ sender_profile_link }})
+			{% if from_email %}
+				or through this email: {{ from_email }}
+			{% endif %}
+		{% else %}
+			{% if from_email %}
+		You can reach them through this email: {{ from_email }}
+			{% endif %}
+		{% endif %}
+Thank you,
+Pairup Israel Team
+
+You are receiving this alert since you've previously requested to get notified on these event, through http://pairup.org.il

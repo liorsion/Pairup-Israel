@@ -1,0 +1,138 @@
+{% load i18n %}
+{% load avatar_tags %}
+<!doctype html>
+<!-- paulirish.com/2008/conditional-stylesheets-vs-css-hacks-answer-neither/ -->
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en"> <![endif]-->
+<!--[if IE 8]>    <html class="no-js ie8 oldie" lang="en"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en"> <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta name="google-site-verification" content="tP3vloopKQDzObQ8hWqJcsln7EF4UXJUdomfbwaxUww" />
+  <!-- Use the .htaccess and remove these lines to avoid edge case issues.
+       More info: h5bp.com/b/378 -->
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+  <title>{% block page_title %}Pairup Israel{% endblock %}</title>
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <!-- Mobile viewport optimized: j.mp/bplateviewport -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- Place favicon.ico and apple-touch-icon.png in the root directory: mathiasbynens.be/notes/touch-icons -->
+
+  <!-- CSS: implied media="all" -->
+  <link rel="stylesheet" href="{{ STATIC_URL }}css/common.css">
+  {% block extra_css %}{% endblock %}
+  <!-- More ideas for your <head> here: h5bp.com/docs/#head-Tips -->
+
+  <!-- All JavaScript at the bottom, except for Modernizr and Respond.
+       Modernizr enables HTML5 elements & feature detects; Respond is a polyfill for min/max-width CSS3 Media Queries
+       For optimal performance, use a custom Modernizr build: www.modernizr.com/download/ -->
+  <script src="{{ STATIC_URL }}js/libs/modernizr-2.0.min.js"></script>
+  <script src="{{ STATIC_URL }}js/libs/respond.min.js"></script>
+</head>
+
+<body>
+
+  <div class="container_16">
+    <header class="columns clearfix" style="border-bottom: 2px solid #D2D2D0; margin-bottom: 10px">
+		<h1 class="grid_9 columns alpha">
+			<a href="/">
+				<span>{% trans "Pairup Israel" %}</span>
+			</a>
+		</h1>
+		<div id="user_header" class="grid_7 column omega">
+			<p class="welcome">
+				<a href="{% url edit_profile %}">{% trans "Edit Profile" %}</a>
+				{% if user.is_authenticated %}
+				<a href="{% url auth_logout %}">{% trans "Logout" %}</a>
+				&nbsp;&nbsp;
+				<a href="{% url user_profile user.get_profile.user_slug %}">{% avatar user 24 %}</a>
+				{% else %}
+				<a href="{% url auth_login %}">{% trans "Login" %}</a>
+				{% endif %}
+			</p>
+		</div>
+    </header>
+    <div id="main" role="main">
+		{% block content %}{% endblock %}
+    </div>
+    <footer>
+
+    </footer>
+  </div> <!--! end of #container -->
+
+
+  <!-- JavaScript at the bottom for fast page loading -->
+
+  <!-- Grab Google CDN's jQuery, with a protocol relative URL; fall back to local if offline -->
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
+  <script>window.jQuery || document.write('<script src="{{ STATIC_URL }}js/libs/jquery-1.6.2.min.js"><\/script>')</script>
+  <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.14/jquery-ui.min.js"></script>
+  <script>window.jQuery || document.write('<script src="{{ STATIC_URL }}js/libs/jquery-ui-1.8.14.min.js"><\/script>')</script>
+	{% block external_sources %}{% endblock %}
+  <script>
+    var _gaq=[['_setAccount','UA-24479409-1'],['_trackPageview'],['_trackPageLoadTime']];
+    (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];g.async=1;
+    g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
+    s.parentNode.insertBefore(g,s)}(document,'script'));
+  </script>
+
+<script type="text/javascript" charset="utf-8">
+  var is_ssl = ("https:" == document.location.protocol);
+  var asset_host = is_ssl ? "https://s3.amazonaws.com/getsatisfaction.com/" : "http://s3.amazonaws.com/getsatisfaction.com/";
+  document.write(unescape("%3Cscript src='" + asset_host + "javascripts/feedback-v2.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+
+<script type="text/javascript" charset="utf-8">
+  var feedback_widget_options = {};
+  feedback_widget_options.display = "overlay";  
+  feedback_widget_options.company = "pairuptlv";
+  feedback_widget_options.placement = "left";
+  feedback_widget_options.color = "#222";
+  feedback_widget_options.style = "idea";
+  var feedback_widget = new GSFN.feedback_widget(feedback_widget_options);
+</script>
+  <!-- Prompt IE 6 users to install Chrome Frame. Remove this if you want to support IE 6.
+       chromium.org/developers/how-tos/chrome-frame-getting-started -->
+  <!--[if lt IE 7 ]>
+    <script src="//ajax.googleapis.com/ajax/libs/chrome-frame/1.0.3/CFInstall.min.js"></script>
+    <script>window.attachEvent("onload",function(){CFInstall.check({mode:"overlay"})})</script>
+  <![endif]-->
+  <script type="text/javascript">
+    	$(document).ready(function() {
+    		$.ajaxSetup({
+        		error: function (xhr, textStatus, errorThrown) {
+        			alert("We're sorry - some type of internal error happened at Pairup Israel. We're looking into it. (error: "+textStatus+")");	
+        		},
+        	    beforeSend: function(xhr, settings) {
+        	        function getCookie(name) {
+        	            var cookieValue = null;
+        	            if (document.cookie && document.cookie != '') {
+        	                var cookies = document.cookie.split(';');
+        	                for (var i = 0; i < cookies.length; i++) {
+        	                    var cookie = jQuery.trim(cookies[i]);
+        	                    // Does this cookie string begin with the name we want?
+        	                    if (cookie.substring(0, name.length + 1) == (name + '=')) {
+        	                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+        	                        break;
+        	                    }
+        	                }
+        	            }
+        	            return cookieValue;
+        	        }
+        	        if (!(/^http:.*/.test(settings.url) || /^https:.*/.test(settings.url))) {
+        	            // Only send the token to relative URLs i.e. locally.
+        	            xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
+        	        }
+        	    }
+        	});
+    		
+    		{% block dom_ready_script %}{% endblock %}
+    	})
+   </script>
+   {% block extrabody %}{% endblock %}
+</body>
+</html>

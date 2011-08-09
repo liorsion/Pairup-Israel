@@ -1,0 +1,19 @@
+{% extends "email/email_base.html" %}
+{% block msgsubject %}Cofounder offer overdue{% endblock %}
+{% block content %}
+<tr>
+	<td>
+		Dear {{ to_user.username }},
+	</td>
+</tr>
+<tr>
+	<td>
+		It's been over a week since you last updated your request for a cofounder <a href="{{ partner_link }}">here</a>.
+	</td>
+</tr>
+<tr>
+	<td>
+	If you would like to re-issue the request, please log in to your profile and renew the request.
+	</td>
+</tr>
+{% endblock %}
