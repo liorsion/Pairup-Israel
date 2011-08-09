@@ -1,3 +1,9 @@
 *.pyc
 epio.py
 local.py
+.sass-cache/
+findapartner/.sass-cache
+.hg/
+.sass-cache/
+.settings/
+static_root/admin/
