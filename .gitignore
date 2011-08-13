@@ -7,3 +7,6 @@ findapartner/.sass-cache
 .sass-cache/
 .settings/
 static_root/admin/
+.hgignore
+.project
+.pydevproject

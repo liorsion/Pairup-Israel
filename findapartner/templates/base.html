@@ -38,12 +38,12 @@
 
   <div class="container_16">
     <header class="columns clearfix" style="border-bottom: 2px solid #D2D2D0; margin-bottom: 10px">
-		<h1 class="grid_9 columns alpha">
+		<h1 class="grid_6 columns alpha">
 			<a href="/">
 				<span>{% trans "Pairup Israel" %}</span>
 			</a>
 		</h1>
-		<div id="user_header" class="grid_7 column omega">
+		<div id="user_header" class="grid_10 column omega">
 			<p class="welcome">
 				<a href="{% url edit_profile %}">{% trans "Edit Profile" %}</a>
 				{% if user.is_authenticated %}
@@ -53,7 +53,18 @@
 				{% else %}
 				<a href="{% url auth_login %}">{% trans "Login" %}</a>
 				{% endif %}
+				
 			</p>
+			<div>
+				<div style="float: right"">
+					<div id="fb-root"></div>
+					<script src="http://connect.facebook.net/en_US/all.js#appId=171089799627163&amp;xfbml=1"></script>
+					<fb:like href="" send="true" width="450" show_faces="true" action="like" font=""></fb:like>
+				</div>
+				<div style="float: right">
+					<g:plusone size="medium"></g:plusone>
+				</div>
+			</div>
 		</div>
     </header>
     <div id="main" role="main">
@@ -133,6 +144,13 @@
     		{% block dom_ready_script %}{% endblock %}
     	})
    </script>
+   <script type="text/javascript">
+  (function() {
+    var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
+    po.src = 'https://apis.google.com/js/plusone.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
+  })();
+</script>
    {% block extrabody %}{% endblock %}
 </body>
 </html>
