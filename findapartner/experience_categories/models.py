@@ -1,4 +1,4 @@
-from django.db import models
+from django.db import models, IntegrityError
 
 class ExperienceCategory(models.Model):
     name = models.CharField(max_length=50, unique=True)

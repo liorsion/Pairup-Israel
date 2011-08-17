@@ -9,13 +9,13 @@ class CategoryTagModelMultipleChoiceField(forms.ModelMultipleChoiceField):
         super(CategoryTagModelMultipleChoiceField,self).__init__(queryset, *args, **kwargs)
         
     def clean(self, value):
-        if self.case_sensitive:
-            to_field_name = "%s__iexact" % (self.to_field_name)
-        else:
-            to_field_name = self.to_field_name
         value = list(set([value.lower() for value in value.split(',')]))
         for val in value:
-            kwargs = {to_field_name:val}
+            if self.case_sensitive:
+                kwargs = {"%s__iexact" % (self.to_field_name):val,
+                          "defaults":{self.to_field_name: val}}
+            else:
+                kwargs = {self.to_field_name:val}
             try:
                 val, created = self.queryset.get_or_create(**kwargs)
             except MultipleObjectsReturned:

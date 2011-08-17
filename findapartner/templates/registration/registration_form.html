@@ -8,6 +8,7 @@
 <div id="login_info" class="grid_8 columns alpha">
 	<form method="post" accept-charset="utf-8" id="reg_form"> {% csrf_token %}
 		{{ form.as_p }}
+		<input type="submit" value="{% trans 'Register Locally' %}" />
 	</form>
 </div>
 <div class="grid_8 columns omega">
@@ -19,9 +20,6 @@
 	</p>
 	<p class="grid_8 columns omega">
 		<a class="button" href="{% url socialauth_begin "linkedin" %}" id="assoc_linkedin">LinkedIn</a>
-	</p>
-	<p class="grid_8 columns omega">
-		<input type="submit" value="{% trans 'Register Locally' %}" />
 	</p>
 </div>
 {% endblock %}

@@ -161,7 +161,7 @@ class RegisterProfile(View):
                 profile = facebook_api.get_object('me')
             
                 post_req = request.POST.copy()
-                post_req["username"] = profile["username"]
+                post_req["username"] = profile["name"]
                 post_req["email"] = profile["email"]
                 password = rand1(8)
                 post_req["password1"]=post_req["password2"]=password

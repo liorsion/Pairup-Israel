@@ -71,7 +71,11 @@ def create_user_social_profile(sender, instance, **kwargs):
         if "skills" in instance.extra_data:
             skills = instance.extra_data["skills"]
             for linkedin_skill in skills['skill']:
-                pairup_skill = ExperienceCategory.objects.get_or_create(name=linkedin_skill['skill']['name'])
+                try:
+                    pairup_skill = ExperienceCategory.objects.get(name__exact=linkedin_skill['skill']['name'])
+                except ExperienceCategory.DoesNotExist:
+                    pairup_skill = ExperienceCategory(name=linkedin_skill['skill']['name'])
+                    pairup_skill.save()
                 user_profile.skills.add(pairup_skill[0])
         if "summary" in instance.extra_data and len(user_profile.extra_info) == 0:
             user_profile.extra_info = instance.extra_data["summary"]
