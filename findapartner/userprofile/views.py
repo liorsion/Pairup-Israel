@@ -18,8 +18,7 @@ from django.contrib.auth import authenticate,login as login_fnc, REDIRECT_FIELD_
 from django.core.urlresolvers import reverse
 from django.template.loader import get_template
 from django.template import Context
-from django.db.models import Q
-from django.db.models import Count
+from django.db.models import Q, Count, F
 
 from registration.views import register
 import facebook
@@ -31,6 +30,7 @@ from findapartner.userprofile.models import UserProfile
 from findapartner.utils.views import AjaxView
 from findapartner.utils.helpers import rand1
 from findapartner.partner.models import Partner
+from findapartner.stats.models import StatModel
 
 class SendMessageView(AjaxView):
     
@@ -81,6 +81,9 @@ class SendMessageView(AjaxView):
             msg = EmailMultiAlternatives(subject, text_content, send_from_email, [send_to_user.email])
             msg.attach_alternative(html_content, "text/html")
             msg.send(fail_silently=False)
+            
+            new_stat, created = StatModel.objects.get_or_create(stat_type='mail')
+            new_stat.update(stat_counter=F('stat_counter')+1)
                 
         except SMTPException:
             response["message"] = _("Failed sending email message")

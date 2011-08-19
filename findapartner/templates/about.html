@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block page_title %}{% trans "About PairUp Israel" %}{% endblock %}
+{% block content %}
+	<header class="grid_16 columns alpha omega" style="margin-bottom:10px">
+		<h1>What is Pairup all about?</h1>
+	</header>
+	<section class="grid_16 alpha omega">
+	
+	</section>
+	<section class="grid_16 alpha omega">
+		<header class="grid_16 columns alpha omega" style="margin-bottom:10px">
+			<h2>How did it start?</h2>
+		</header>
+		
+	</section>
+	<section class="grid_16 alpha omega">
+		<header class="grid_16 columns alpha omega" style="margin-bottom:10px">
+			<h2>Technology</h2>
+		</header>
+		<p class="grid_16 alpha omega">
+	For the entire project I tried to stay as basic as possible. When possible I didn't fork and customized projects, used the default models in Django and so on - this is not the usual way I develop,
+	and it's sometimes a little limiting, but I want to give a project that can perhaps also teach a little bit about Django, using open source and general technologies.
+		</p>
+		<p class="grid_16 alpha omega">
+	The site is build using Python/Django, my currently favorite language and web framework. It was built using a lot of good open source technologies like <a href="https://github.com/sebleier/django-redis-cache" target="_blank">django-redis-cache</a> (for caching of anonymous users and sessions),
+	and obviously dependent on RedisPy client for that as well. For social oauth stuff Pairup is using <a href="https://github.com/omab/django-social-auth" target="_blank">django-social-auth</a>, but
+	I didn't like the way it interacted with Facebook, so specifically for that I used <a href="github.com/liorsion/python-sdk" target="_blank">python-sdk</a> client and interacted with the <a href="https://developers.facebook.com/docs/reference/javascript/FB.api/" target="_bank">Facebook API</a> directly.
+	Since many people didn't want to use social networks to log in, I added <a href="" target="_blank">django-registration</a> that allows for email authentication registration process. 
+	The only thing I did fork and changed a little was <a href="https://github.com/liorsion/django-avatar" target="_blank">django-avatar</a>, since I wanted to optionally display the images imported from above social networks, if they existed.
+		</p>
+		<p class="grid_16 alpha omega">
+	To admin and log I use a slightly forked version of mine of <a href="https://github.com/liorsion/django-sentry" target="_blank">django-sentry</a> - the extra things I added there are really minor, you can use the default version.
+	Just to sum up a couple of Django plugins used when developing the site: <a href="https://github.com/django-extensions/django-extensions" target="_blank">django-extensions</a> and obviously <a href="http://pypi.python.org/pypi/django-debug-toolbar/" target="_blank">django toolbar</a>
+		</p>
+		<p class="grid_16 alpha omega">
+	But this is not where it ends: For the basics of the html I used <a href="http://paulirish.com/" target="_blank">Paul Irish</a>'s <a href="http://html5boilerplate.com/" target="_blank">HTML5 Biolerplate</a>, and the equivalent email version of <a href="http://htmlemailboilerplate.com/" target="_blank">HTML5 Email biolerplate</a> - both are the results 
+	of years or experience dealing with all the hardships of browsers and email readers. I hardly code direct CSS anymore, but use <a href="http://sass-lang.com/" target="_blank">Scss</a> through <a href="http://compass-style.org/" target="_blank">Compass</a>)
+		</p>
+	</section>
+	<section class="grid_16 alpha omega">
+		<header class="grid_16 columns alpha omega" style="margin-bottom:10px">
+			<h3>Where can you find more info?</h3>
+		</header>
+	</section>
+{% endblock %}
+	

@@ -39,5 +39,6 @@ urlpatterns = patterns('',
     
     url(r'^added/$',direct_to_template, {'template': 'partner/partner_added.html'}, name="position_added"),
     (r'^sentry/', include('sentry.web.urls')),
+    url(r'^about/$',direct_to_template, {'template': 'about.html'}, name="about"),
     (r'^$', IndexView.as_view())
 )

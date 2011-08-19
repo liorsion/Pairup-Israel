@@ -18,7 +18,11 @@
 	</h3>
 	{% endif %}
 	<div id="contact" class="grid_16 columns alpha omega" >
+		{% if object.user.email %}
 		<a class="button" id="contact">Contact me</a>
+		{% else %}
+		{{ object }} {% trans "did not add email to PairUp" %}
+		{% endif %}
 	</div>
 	<section id="about" class="grid_16 columns alpha omega">
 			<h4 class="grid_2 column alpha">About me</h4>
@@ -56,6 +60,7 @@
 				{{ form.as_p }}
 				<p>
 					<a class="button" id="send_message">{% trans "Send" %}</a>
+					<div id="send_message_spin"></div>
 				</p>
 			</form>
 	</section>
@@ -69,6 +74,8 @@
 	
 	$('#send_message').click(function() {
 		form = $('#message_form');
+		_gaq.push(['_trackEvent', 'send_message', 'user_profile', '', '']);
+		//var spinner = new Spinner(spinner_opts).spin($('send_message_spin'));
 		$.post('{% url send_message object.user.username %}',
 				{'from':form.find('#id_name').val(),
 				 'email':form.find('#id_email').val(),
@@ -82,4 +89,19 @@
 				)
 		
 	})
+{% endblock %}
+{% block extra1body %}
+<script type="text/javascript" src="{{ STATIC_URL }}js/spin.min.js"></script>
+<script>
+var spinner_opts = {
+  lines: 12, // The number of lines to draw
+  length: 7, // The length of each line
+  width: 5, // The line thickness
+  radius: 10, // The radius of the inner circle
+  color: '#000', // #rbg or #rrggbb
+  speed: 1, // Rounds per second
+  trail: 100, // Afterglow percentage
+  shadow: true // Whether to render a shadow
+};
+</script>
 {% endblock %}

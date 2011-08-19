@@ -110,6 +110,7 @@ INSTALLED_APPS = (
     'ideas',
     'partner',
     'userprofile',
+    'stats',
     'django.contrib.admin',
 )
 

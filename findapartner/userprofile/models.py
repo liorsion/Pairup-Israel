@@ -15,7 +15,7 @@ class UserProfile(models.Model):
 
     # Other fields here
     extra_info = models.CharField(max_length=500, blank=True, null=True)
-    looking_for_position = models.BooleanField(default=False)
+    looking_for_position = models.BooleanField(default=True)
     skills = models.ManyToManyField(ExperienceCategory, blank=True, null=True)
     
     def save(self, force_insert=False, force_update=False, using=None):

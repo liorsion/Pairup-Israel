@@ -50,8 +50,7 @@ a img {
   border: none;
 }
 
-article, aside, details, figcaption, figure,
-footer, header, hgroup, menu, nav, section {
+article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section, summary {
   display: block;
 }
 
@@ -1148,7 +1147,7 @@ body {
 
 body {
   color: #444444;
-  font: 12px/21px "HelveticaNeue", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font: 13px/21px "HelveticaNeue", "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
 html {
