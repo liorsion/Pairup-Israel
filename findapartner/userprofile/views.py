@@ -83,7 +83,7 @@ class SendMessageView(AjaxView):
             msg.send(fail_silently=False)
             
             new_stat, created = StatModel.objects.get_or_create(stat_type='mail')
-            new_stat.update(stat_counter=F('stat_counter')+1)
+            StatModel.objects.filter(pk=new_stat.id).update(stat_counter=F('stat_counter')+1)
                 
         except SMTPException:
             response["message"] = _("Failed sending email message")

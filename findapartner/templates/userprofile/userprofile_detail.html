@@ -60,7 +60,7 @@
 				{{ form.as_p }}
 				<p>
 					<a class="button" id="send_message">{% trans "Send" %}</a>
-					<div id="send_message_spin"></div>
+					<img src="{{ STATIC_URL }}images/ajax-loader.gif" style="display:none" id="send_message_spin" />
 				</p>
 			</form>
 	</section>
@@ -75,12 +75,13 @@
 	$('#send_message').click(function() {
 		form = $('#message_form');
 		_gaq.push(['_trackEvent', 'send_message', 'user_profile', '', '']);
-		//var spinner = new Spinner(spinner_opts).spin($('send_message_spin'));
+		$('#send_message_spin').show();
 		$.post('{% url send_message object.user.username %}',
 				{'from':form.find('#id_name').val(),
 				 'email':form.find('#id_email').val(),
 				 'message':form.find('#id_message').val()},
 				 function(data) {
+				 	$('#send_message_spin').hide();
 				 	if (data.success) {
 				 		$('#message').slideUp('slow');
 				 	} 
