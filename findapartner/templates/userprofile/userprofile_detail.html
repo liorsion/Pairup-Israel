@@ -76,7 +76,7 @@
 		form = $('#message_form');
 		_gaq.push(['_trackEvent', 'send_message', 'user_profile', '', '']);
 		$('#send_message_spin').show();
-		$.post('{% url send_message object.user.username %}',
+		$.post('{% url send_message object.user_slug %}',
 				{'from':form.find('#id_name').val(),
 				 'email':form.find('#id_email').val(),
 				 'message':form.find('#id_message').val()},
