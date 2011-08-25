@@ -2,7 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 from django.template.defaultfilters import slugify
-from django.db.models import Q
+from django.db.models import Q, F
 
 from social_auth.models import UserSocialAuth
 
@@ -55,7 +55,6 @@ class UserProfile(models.Model):
             except UserSocialAuth.MultipleObjectsReturned:
                 self._social_profile = UserSocialAuth.objects.filter(user=self.user).all()
         return self._social_profile
-    
     
     
 def create_user_profile(sender, instance, created, **kwargs):

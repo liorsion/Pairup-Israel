@@ -20,7 +20,6 @@
 	<thead>  
         <tr>  
             <th scope="col">Name</th>  
-            <th scope="col">Looking?</th>
             <th scope="col">Skills</th>
         </tr>  
     </thead>  
@@ -29,7 +28,6 @@
     	<td>
     		<a href="{% url user_profile user.get_profile.user_slug %}">{{ user.username }}</a>
     	</td>
-    	<td>{{ user.get_profile.looking_for_position }}</td>
     	<td><ul class="grid_6 columns omega clearfix inline-list">
 				{% for skill in user.get_profile.skills.all %}
 				<li>{{ skill.name }}</li>

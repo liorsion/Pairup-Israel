@@ -53,8 +53,8 @@ class SendMessageView(AjaxView):
             return response
         
         try:
-            send_to_user = User.objects.get(username=send_to)
-        except User.DoesNotExist:
+            send_to_user = UserProfile.objects.get(user_slug__iexact=send_to).user
+        except UserProfile.DoesNotExist:
             response["message"] = "%s %s" % (_("Couldn't find user"), send_to)
             return response
         
@@ -84,6 +84,10 @@ class SendMessageView(AjaxView):
             
             new_stat, created = StatModel.objects.get_or_create(stat_type='mail')
             StatModel.objects.filter(pk=new_stat.id).update(stat_counter=F('stat_counter')+1)
+            msg_sent_stat = StatModel(stat_type = "msg",
+                                 stat_counter = 1,
+                                 related_user = send_to_user.get_profile())
+            msg_sent_stat.save()
                 
         except SMTPException:
             response["message"] = _("Failed sending email message")
@@ -141,10 +145,13 @@ class PublicProfile(DetailView):
         else:
             context["form"] = ContactUserForm()
             
-        if self.request.user.is_authenticated() and self.request.user == self.object: #.user:
-            context["active_social_profiles"]=[x for x in UserSocialAuth.objects.filter(user=self.request.user).all()]
-        else:
-            context["active_social_profiles"]=[x for x in UserSocialAuth.objects.filter(user=self.object.user).all()]
+        if not self.request.user.is_authenticated() or self.request.user != self.object: #.user:
+            msg_sent_stat = StatModel(stat_type = "view",
+                                 stat_counter = 1,
+                                 related_user = self.object)
+            msg_sent_stat.save()
+            
+        context["active_social_profiles"]=[x for x in UserSocialAuth.objects.filter(user=self.object.user).all()]
             
         return context
    
