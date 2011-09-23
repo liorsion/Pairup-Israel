@@ -133,7 +133,7 @@ class UserSearchViewFeed(Feed):
 		return item.user.username
 
 	def item_description(self, item):
-		return item.user.first_name
+		return ",".join([skill.name for skill in list(item.skills.all())])
 		
 	def item_link(self, item):
 		return reverse("user_profile", kwargs={"slug":item.user_slug})
