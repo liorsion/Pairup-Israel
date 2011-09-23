@@ -5,6 +5,8 @@ from django.utils.translation import ugettext as _
 from django.core.mail import send_mail
 from django.views.generic import ListView, DetailView
 from django.contrib.auth.models import User
+from django.contrib.syndication.views import Feed
+from django.utils.feedgenerator import Rss201rev2Feed
 
 from findapartner.partner.forms import PairupForm
 from findapartner.partner.models import Partner
@@ -22,6 +24,21 @@ class ListPartnersView(ListView):
             qs_filter.update({"experience_categories__name":exp_cat})
         queryset=Partner.objects.filter(**qs_filter)
         return queryset 
+
+class ListPartnerViewFeed(Feed):
+	title = "Pairup Israel Latest Positions"
+	link = "/list/"
+	description = "Latest open positions added to Pairup Israel"
+	feed_type = Rss201rev2Feed 
+	
+	def items(self):
+		return Partner.objects.order_by('-id')[:10]
+
+	def item_title(self, item):
+		return item.idea
+
+	def item_description(self, item):
+		return item.general_description
         
     
 class PairupView(CreateView):

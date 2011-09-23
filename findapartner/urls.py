@@ -5,14 +5,15 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import admin
 admin.autodiscover()
 
-from findapartner.partner.views import PairupView, PartnerActionView, ListPartnersView, PublicPartnerView
+from findapartner.partner.views import PairupView, PartnerActionView, ListPartnersView, ListPartnerViewFeed, PublicPartnerView
 from findapartner.partner.models import Partner 
 from findapartner.experience_categories.views import ExperienceCategoriesView
 from findapartner.categories.views import CategoriesView
-from findapartner.userprofile.views import UpdateProfileView, PublicProfile, SendMessageView, RegisterProfile, FacebookLogin, AssociateFacebook, TwitterRegister, UserSearchView
+from findapartner.userprofile.views import UpdateProfileView, PublicProfile, SendMessageView, RegisterProfile, FacebookLogin, AssociateFacebook, TwitterRegister, UserSearchView, UserSearchViewFeed
 from findapartner.views import IndexView
 
 urlpatterns = patterns('',
+                       
     url(r'^accounts/register/twitter/$',TwitterRegister.as_view(),name='twitter_reg'),
     url(r'^accounts/register/$',RegisterProfile.as_view(),name='registration_register'),
     url(r'^accounts/login/facebook/$',FacebookLogin.as_view(),name='facebook_login'),
@@ -34,9 +35,10 @@ urlpatterns = patterns('',
     url(r'^partner_request/(?P<action>[\w\-\"]+)/$',login_required(PartnerActionView.as_view()), name="update_event_action"),
     url(r'^open_positions/(?P<pk>\d+)/$',PublicPartnerView.as_view(),name="public_partner"),
     url(r'^looking/$',UserSearchView.as_view(),name="look_for_partner"),
+	url(r'^looking/feed/$',UserSearchViewFeed(),name="look_for_partner_feed"),
     url(r'^add_partner_position/$',login_required(PairupView.as_view()),name="add_position"),
     url(r'^list/$',ListPartnersView.as_view(model=Partner),name="list_positions"),
-    
+    url(r'^list/feed/$',ListPartnerViewFeed(),name="list_positions_feed"),
     url(r'^added/$',direct_to_template, {'template': 'partner/partner_added.html'}, name="position_added"),
     (r'^sentry/', include('sentry.web.urls')),
     url(r'^about/$',direct_to_template, {'template': 'about.html'}, name="about"),

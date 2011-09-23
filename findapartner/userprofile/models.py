@@ -29,7 +29,9 @@ class UserProfile(models.Model):
     
     def __unicode__(self):
         return "%s" % self.user.username
-    
+
+	def get_absolute_url(self):
+		return reverse("user_profile", kwargs={"slug":self.user_slug})
         
     def get_default_avatar(self):
         if self.social_profile and self.social_profile != []:

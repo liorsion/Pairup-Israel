@@ -19,6 +19,8 @@ from django.core.urlresolvers import reverse
 from django.template.loader import get_template
 from django.template import Context
 from django.db.models import Q, Count, F
+from django.contrib.syndication.views import Feed
+from django.utils.feedgenerator import Rss201rev2Feed
 
 from registration.views import register
 import facebook
@@ -30,7 +32,7 @@ from findapartner.userprofile.models import UserProfile
 from findapartner.utils.views import AjaxView
 from findapartner.utils.helpers import rand1
 from findapartner.partner.models import Partner
-from findapartner.stats.models import StatModel
+from findapartner.stats.models import StatModel, UserStatModel
 
 class SendMessageView(AjaxView):
     
@@ -84,9 +86,8 @@ class SendMessageView(AjaxView):
             
             new_stat, created = StatModel.objects.get_or_create(stat_type='mail')
             StatModel.objects.filter(pk=new_stat.id).update(stat_counter=F('stat_counter')+1)
-            msg_sent_stat = StatModel(stat_type = "msg",
-                                 stat_counter = 1,
-                                 related_user = send_to_user.get_profile())
+            msg_sent_stat = UserStatModel(stat_type = "msg",
+                                          related_user = send_to_user.get_profile())
             msg_sent_stat.save()
                 
         except SMTPException:
@@ -113,12 +114,30 @@ class UserSearchView(ListView):
                 for search_category in search_categories_list:
                     q_value = q_value | Q(userprofile__skills__name=search_category)
                 args = (q_value,)
-        queryset=User.objects.filter(*args,**qs_filter).annotate(num_hits=Count('id')).order_by('num_hits')
+        queryset=User.objects.filter(*args,**qs_filter).annotate(num_hits=Count('id')).order_by('num_hits', '-id')
         return queryset 
       
     def post(self, request, *args, **kwargs):
         return self.get(request, *args, **kwargs)
-            
+
+class UserSearchViewFeed(Feed):
+	title = "Pairup Israel Latest Users To Join"
+	link = "/looking/"
+	description = "Latest users who joined Pairup Israel looking for new ventures"
+	feed_type = Rss201rev2Feed 
+	
+	def items(self):
+		return UserProfile.objects.filter(looking_for_position=True).order_by('-id')[:10]
+
+	def item_title(self, item):
+		return item.user.username
+
+	def item_description(self, item):
+		return item.user.first_name
+		
+	def item_link(self, item):
+		return reverse("user_profile", kwargs={"slug":item.user_slug})
+		
 class UpdateProfileView(UpdateView):
     model = User
     form_class = ProfileForm
@@ -146,9 +165,8 @@ class PublicProfile(DetailView):
             context["form"] = ContactUserForm()
             
         if not self.request.user.is_authenticated() or self.request.user != self.object: #.user:
-            msg_sent_stat = StatModel(stat_type = "view",
-                                 stat_counter = 1,
-                                 related_user = self.object)
+            msg_sent_stat = UserStatModel(stat_type = "view",
+                                          related_user = self.object)
             msg_sent_stat.save()
             
         context["active_social_profiles"]=[x for x in UserSocialAuth.objects.filter(user=self.object.user).all()]
