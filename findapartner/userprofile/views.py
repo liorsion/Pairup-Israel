@@ -6,6 +6,7 @@ from django.utils import simplejson
 from django.views.generic.edit import UpdateView
 from django.contrib.auth.models import User
 from django.views.generic import DetailView, ListView
+from django.views.generic.list_detail import object_list
 from django.views.generic.base import View
 from django.views.generic.edit import FormView
 from django.contrib.auth.models import User

@@ -14,7 +14,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 
   <title>{% block page_title %}Pairup Israel{% endblock %}</title>
-  <meta name="description" content="">
+  <meta name="description" content="Find a Israeli cofounders for your startup - or your next startup to join">
   <meta name="author" content="">
 
   <!-- Mobile viewport optimized: j.mp/bplateviewport -->
@@ -39,12 +39,16 @@
 
   <div class="container_16">
     <header class="columns clearfix" style="border-bottom: 2px solid #D2D2D0; margin-bottom: 10px">
-		<h1 class="grid_6 columns alpha">
+		<h1 class="grid_8 columns alpha">
 			<a href="/">
+				<img src="{{ STATIC_URL }}images/pairup_logo.png" width="80" height="39" />
 				<span>{% trans "Pairup Israel" %}</span>
+				<div style="float: right">
+					<g:plusone size="medium"></g:plusone>
+				</div>
 			</a>
 		</h1>
-		<div id="user_header" class="grid_10 column omega">
+		<div id="user_header" class="grid_8 column omega">
 			<p class="welcome">
 				<a href="{% url edit_profile %}">{% trans "Edit Profile" %}</a>
 				{% if user.is_authenticated %}
@@ -60,11 +64,9 @@
 				<div style="float: right"">
 					<div id="fb-root"></div>
 					<script src="http://connect.facebook.net/en_US/all.js#appId=171089799627163&amp;xfbml=1"></script>
-					<fb:like href="" send="true" width="450" show_faces="true" action="like" font=""></fb:like>
+					<fb:like href="" send="true" width="340" show_faces="true" action="like" font=""></fb:like>
 				</div>
-				<div style="float: right">
-					<g:plusone size="medium"></g:plusone>
-				</div>
+				
 			</div>
 		</div>
     </header>

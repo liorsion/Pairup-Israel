@@ -1,7 +1,9 @@
 {% extends "base.html" %}
 {% load i18n %}
 {% load humanize %}
+{% load avatar_tags %}
 {% block page_title %}{% trans "List Active Users - Pairup Israel" %}{% endblock %}
+{% block extra_header_links %}<link rel="alternate" type="application/rss+xml" title="RSS" href="{% url look_for_partner_feed %}" />{% endblock %}
 {% block content %}
 <div class="container_16 alpha omega columns">
 	<div class="grid_3 alpha">
@@ -16,7 +18,7 @@
 		</form>
 	</div>
 </div>
-<table>
+<table style="width:100%">
 	<thead>  
         <tr>  
             <th scope="col">Name</th>  
@@ -26,6 +28,7 @@
     {% for user in object_list %}
     <tr>
     	<td>
+    		{% avatar user 40 %}
     		<a href="{% url user_profile user.get_profile.user_slug %}">{{ user.username }}</a>
     	</td>
     	<td><ul class="grid_6 columns omega clearfix inline-list">
