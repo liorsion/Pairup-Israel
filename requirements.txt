@@ -4,7 +4,7 @@ Unipath
 django-redis-cache
 fabric
 south
-redis==2.4.9
+redis==4.4.4
 git+https://github.com/omab/django-social-auth.git
 django-registration
 git+git://github.com/django-extensions/django-extensions.git
